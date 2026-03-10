@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Чек-лист проверки магазина</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --accent: #4f7fff;
+    --accent2: #7b5cf0;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e8eaf6;
+    --text2: #8b91b8;
+    --text3: #5a6080;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:130px; }
+
+  .header { background:linear-gradient(135deg,#1a1d27,#22263a); padding:18px 14px 14px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+  .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .header-title { font-size:17px; font-weight:800; letter-spacing:-0.3px; }
+  .header-sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .reset-btn { background:var(--surface2); border:1px solid var(--border); color:var(--text2); font-family:'Manrope',sans-serif; font-size:12px; font-weight:600; padding:6px 12px; border-radius:8px; cursor:pointer; }
+
+  .meta-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .meta-field { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:8px 12px; }
+  .meta-label { font-size:10px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+  .meta-select, .meta-input { background:transparent; border:none; color:var(--text); font-family:'Manrope',sans-serif; font-size:14px; font-weight:600; width:100%; outline:none; }
+  .meta-select option { background:#22263a; }
+
+  .progress-wrap { background:var(--surface2); border-radius:10px; padding:10px 14px; }
+  .progress-nums { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+  .progress-label { font-size:12px; color:var(--text2); font-weight:600; }
+  .progress-score { font-size:17px; font-weight:800; }
+  .progress-bar-bg { height:6px; background:var(--border); border-radius:10px; overflow:hidden; }
+  .progress-bar-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .4s cubic-bezier(.4,0,.2,1); width:0%; }
+
+  .sections { padding:10px 12px 0; }
+  .section { background:var(--surface); border:1px solid var(--border); border-radius:14px; margin-bottom:10px; overflow:hidden; }
+  .section-header { display:flex; align-items:center; gap:10px; padding:13px 14px; cursor:pointer; user-select:none; }
+  .section-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  .section-info { flex:1; }
+  .section-name { font-size:14px; font-weight:700; }
+  .section-sub { font-size:11px; color:var(--text3); margin-top:2px; }
+  .section-badge { min-width:36px; height:22px; border-radius:6px; background:var(--surface2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--text2); padding:0 6px; flex-shrink:0; transition:all .2s; }
+  .section-chevron { color:var(--text3); font-size:13px; transition:transform .3s; flex-shrink:0; }
+  .section.open .section-chevron { transform:rotate(180deg); }
+  .section-body { display:none; border-top:1px solid var(--border); }
+  .section.open .section-body { display:block; }
+
+  .s0 .section-icon { background:rgba(79,127,255,.15); }
+  .s1 .section-icon { background:rgba(34,197,94,.15); }
+  .s2 .section-icon { background:rgba(245,158,11,.15); }
+  .s3 .section-icon { background:rgba(239,68,68,.15); }
+  .s4 .section-icon { background:rgba(123,92,240,.15); }
+  .s5 .section-icon { background:rgba(20,184,166,.15); }
+
+  .item { display:flex; align-items:flex-start; gap:12px; padding:11px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .15s; }
+  .item:last-child { border-bottom:none; }
+  .item:active { background:var(--surface2); }
+  .item-checkbox { width:22px; height:22px; border-radius:6px; border:2px solid var(--border); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+  .item.checked .item-checkbox { background:var(--green); border-color:var(--green); }
+  .item.issue .item-checkbox { background:var(--red); border-color:var(--red); }
+  .item-check-icon { font-size:12px; color:white; opacity:0; transition:opacity .2s; font-weight:700; }
+  .item.checked .item-check-icon, .item.issue .item-check-icon { opacity:1; }
+  .item-content { flex:1; min-width:0; }
+  .item-text { font-size:13.5px; font-weight:500; color:var(--text); line-height:1.4; transition:color .2s; }
+  .item.checked .item-text { color:var(--text3); text-decoration:line-through; }
+  .item-hint { font-size:11px; color:var(--text3); margin-top:3px; font-style:italic; line-height:1.4; }
+  .item-actions { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .tag-btn { font-size:11px; font-weight:600; font-family:'Manrope',sans-serif; padding:4px 10px; border-radius:6px; border:1px solid var(--border); background:var(--surface2); color:var(--text2); cursor:pointer; transition:all .15s; }
+  .tag-btn.active-issue { background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.5); color:var(--red); }
+  .tag-btn.active-note { background:rgba(79,127,255,.15); border-color:rgba(79,127,255,.4); color:var(--accent); }
+  .item-note-wrap { margin-top:8px; }
+  .item-note { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Manrope',sans-serif; font-size:12px; padding:7px 10px; resize:none; outline:none; min-height:52px; }
+  .item-note:focus { border-color:var(--accent); }
+  .item-note::placeholder { color:var(--text3); }
+
+  .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border); padding:10px 14px; display:flex; gap:8px; }
+  .btn-primary { flex:1; background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; border-radius:12px; color:white; font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; transition:opacity .2s; }
+  .btn-primary:active { opacity:.85; }
+  .btn-secondary { background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--text2); font-family:'Manrope',sans-serif; font-size:13px; font-weight:700; padding:13px 14px; cursor:pointer; }
+
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200; align-items:flex-end; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-height:88vh; overflow-y:auto; padding:18px 16px 40px; border:1px solid var(--border); border-bottom:none; }
+  .modal-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 18px; }
+  .modal-title { font-size:18px; font-weight:800; margin-bottom:16px; }
+
+  .report-score-big { text-align:center; padding:18px; background:var(--surface2); border-radius:12px; margin-bottom:14px; }
+  .report-score-num { font-size:52px; font-weight:800; line-height:1; margin-bottom:4px; }
+  .score-good { color:var(--green); }
+  .score-mid { color:var(--yellow); }
+  .score-bad { color:var(--red); }
+  .report-score-label { font-size:13px; color:var(--text2); }
+
+  .report-meta { background:var(--surface2); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:13px; color:var(--text2); line-height:1.9; }
+
+  .report-section { margin-bottom:14px; }
+  .report-section-title { font-size:11px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; }
+  .report-issue { background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.22); border-radius:8px; padding:9px 12px; font-size:13px; margin-bottom:6px; line-height:1.4; }
+  .report-issue-section { font-size:10px; color:var(--red); font-weight:700; margin-bottom:2px; text-transform:uppercase; letter-spacing:.4px; }
+  .note-text { font-size:12px; color:var(--text2); margin-top:4px; }
+
+  .tasks-section { margin-top:14px; }
+  .tasks-title { font-size:13px; font-weight:700; color:var(--text2); margin-bottom:10px; }
+  .task-input-wrap { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .task-num { font-size:13px; font-weight:700; color:var(--text3); width:18px; flex-shrink:0; }
+  .task-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Manrope',sans-serif; font-size:13px; padding:8px 12px; outline:none; }
+  .task-input:focus { border-color:var(--accent); }
+  .task-input::placeholder { color:var(--text3); }
+
+  .copy-btn { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--text); font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:14px; }
+  .close-btn { width:100%; background:transparent; border:1px solid var(--border); border-radius:12px; color:var(--text2); font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">🏪 Проверка магазина</div>
+      <div class="header-sub" id="dateDisplay"></div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Сброс</button>
+  </div>
+  <div class="meta-row">
+    <div class="meta-field">
+      <div class="meta-label">Магазин</div>
+      <select class="meta-select" id="storeSelect">
+        <option value="">Выберите...</option>
+        <option>Маг. 1</option>
+        <option>Маг. 2</option>
+        <option>Маг. 3</option>
+        <option>Маг. 5</option>
+      </select>
+    </div>
+    <div class="meta-field">
+      <div class="meta-label">Проверяющий</div>
+      <input class="meta-input" id="managerInput" type="text" placeholder="Имя...">
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-nums">
+      <span class="progress-label">Выполнено</span>
+      <span class="progress-score" id="scoreText">0 / 0</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
+  </div>
+</div>
+
+<div class="sections" id="sectionsContainer"></div>
+
+<div class="bottom-bar">
+  <button class="btn-secondary" onclick="toggleAll()">☰ Все</button>
+  <button class="btn-primary" onclick="openReport()">📋 Итоговый отчёт</button>
+</div>
+
+<div class="modal-overlay" id="reportModal" onclick="if(event.target===this)closeReport()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Итоговый отчёт</div>
+    <div id="reportContent"></div>
+    <div class="tasks-section">
+      <div class="tasks-title">📌 Задачи до следующего визита</div>
+      <div class="task-input-wrap"><span class="task-num">1.</span><input class="task-input" id="task1" placeholder="Задача..."></div>
+      <div class="task-input-wrap"><span class="task-num">2.</span><input class="task-input" id="task2" placeholder="Задача..."></div>
+      <div class="task-input-wrap"><span class="task-num">3.</span><input class="task-input" id="task3" placeholder="Задача..."></div>
+    </div>
+    <button class="copy-btn" onclick="copyReport()">📋 Скопировать отчёт</button>
+    <button class="close-btn" onclick="closeReport()">Закрыть</button>
+  </div>
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    id:'s0', icon:'🚪', name:'Вход и торговый зал',
+    items:[
+      { text:'Вывеска чистая, подсветка (если есть) работает' },
+      { text:'Вход не загорожен, коврики чистые' },
+      { text:'Торговый зал чистый: полы подметены, нет мусора' },
+      { text:'Освещение работает полностью (нет перегоревших ламп)' },
+      { text:'Ценники на всех внешних акционных материалах актуальны' },
+      { text:'Неприятных запахов нет: нет запаха протухшего товара или химии' },
+    ]
+  },
+  {
+    id:'s1', icon:'🥩', name:'Витрины и выкладка',
+    items:[
+      { text:'Все витрины включены, температура в норме', hint:'Норма: сол., копч., рыба, салаты, колбаса 0…+5°C / горячее копч., вял. −5…0°C / морозильники −18°C / самообслужка 0…+5°C' },
+      { text:'Нет пустых мест в витринах и холодильниках самообслуживания' },
+      { text:'Уровень глаз в холодильниках самообслуживания — приоритетный товар' },
+      { text:'Принцип слева→направо соблюдён: эконом слева, премиум справа' },
+      { text:'Срезы колбас и нарезки свежие, не заветревшие', hint:'При необходимости — обновить срез' },
+      { text:'Мясо и рыба выглядят свежими, нет потемнений и слизи' },
+      { text:'Брак находится на своём выделенном месте и отмечен ценником «Сток»' },
+      { text:'На бракованном товаре стоит ценник «Сток» с чёткой ценой' },
+      { text:'Новый товар выложен сзади, старый — спереди (правило FIFO)' },
+      { text:'Новинки: наличие ценников и соблюдение правил выкладки' },
+    ]
+  },
+  {
+    id:'s2', icon:'🏷️', name:'Ценники и цены',
+    items:[
+      { text:'Все товары в витрине имеют ценник' },
+      { text:'Ценники читаемые, не выцветшие и не порванные' },
+      { text:'Акционные товары имеют правильное акционное оформление' },
+    ]
+  },
+  {
+    id:'s3', icon:'👤', name:'Персонал и обслуживание',
+    items:[
+      { text:'Продавец на рабочем месте, не занят телефоном или едой' },
+      { text:'Продавцы и остальной персонал в чистой форме / фартуке, выглядит аккуратно' },
+      { text:'Продавец здоровается с покупателем при входе в зону' },
+      { text:'Продавец предлагает дополнительный товар (допродажа)', hint:'Пример: «К рыбе есть свежее масло»' },
+      { text:'Нет очереди дольше 3 минут (при наличии — вызван доп. продавец)' },
+    ]
+  },
+  {
+    id:'s4', icon:'🧊', name:'Холодильники самообслуживания',
+    items:[
+      { text:'Полки заполнены, нет явных «дыр»' },
+      { text:'Полка 2 «уровень глаз» — наиболее продаваемый товар' },
+      { text:'Брак и вёдра — только на нижней полке (полка 4)', hint:'Ценник «Сток» обязателен' },
+      { text:'Все упаковки целые, без повреждений и подтёков' },
+      { text:'Сроки годности проверены (до конца смены не истекают)' },
+      { text:'Стёкла холодильника чистые, нет конденсата и льда' },
+    ]
+  },
+  {
+    id:'s5', icon:'🔑', name:'Подсобные помещения',
+    items:[
+      { text:'Подсобка чистая, проходы свободны' },
+      { text:'Товарный запас организован: понятно что где лежит' },
+      { text:'Товар, требующий спец. температурного режима, отсутствует в проходах или вне холодильника' },
+      { text:'Нет товара без холодильника при нарушении температурного режима' },
+      { text:'Холодильное оборудование подсобки в рабочем состоянии' },
+      { text:'Весы откалиброваны (нулевой показатель без груза)' },
+      { text:'Журнал температур заполнен (если ведётся)' },
+      { text:'Инвентарь чистый: лотки, ножи, доски' },
+    ]
+  },
+];
+
+let state = {};
+let allOpen = false;
+
+function initState() {
+  SECTIONS.forEach(s => s.items.forEach((_, i) => {
+    const key = `${s.id}_${i}`;
+    if (!state[key]) state[key] = { checked:false, issue:false, note:'', showNote:false };
+  }));
+}
+
+function saveState() {
+  const meta = {
+    store: document.getElementById('storeSelect').value,
+    manager: document.getElementById('managerInput').value,
+  };
+  try { localStorage.setItem('cl_v2', JSON.stringify({state, meta})); } catch(e){}
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('cl_v2') || 'null');
+    if (saved && saved.state) state = saved.state;
+    if (saved && saved.meta) {
+      document.getElementById('storeSelect').value = saved.meta.store || '';
+      document.getElementById('managerInput').value = saved.meta.manager || '';
+    }
+  } catch(e){}
+}
+
+function render() {
+  const container = document.getElementById('sectionsContainer');
+  container.innerHTML = '';
+
+  SECTIONS.forEach((sec, si) => {
+    const total = sec.items.length;
+    const checked = sec.items.filter((_,i) => state[sec.id+'_'+i] && state[sec.id+'_'+i].checked).length;
+    const issues = sec.items.filter((_,i) => state[sec.id+'_'+i] && state[sec.id+'_'+i].issue).length;
+
+    const div = document.createElement('div');
+    const isOpen = si === 0 || allOpen;
+    div.className = 'section ' + sec.id + (isOpen ? ' open' : '');
+
+    let badgeStyle = '';
+    if (checked === total) badgeStyle = 'style="background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22c55e"';
+    else if (issues > 0) badgeStyle = 'style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#ef4444"';
+
+    const itemsHTML = sec.items.map((item, i) => {
+      const key = sec.id + '_' + i;
+      const s = state[key] || {};
+      const cls = s.checked ? 'checked' : s.issue ? 'issue' : '';
+      const icon = s.checked ? '✓' : s.issue ? '✕' : '';
+      return '<div class="item ' + cls + '" onclick="toggleItem(\'' + key + '\',event)">' +
+        '<div class="item-checkbox"><span class="item-check-icon">' + icon + '</span></div>' +
+        '<div class="item-content">' +
+          '<div class="item-text">' + item.text + '</div>' +
+          (item.hint ? '<div class="item-hint">' + item.hint + '</div>' : '') +
+          '<div class="item-actions">' +
+            '<button class="tag-btn ' + (s.issue?'active-issue':'') + '" onclick="toggleIssue(\'' + key + '\',event)">⚠️ Замечание</button>' +
+            '<button class="tag-btn ' + (s.showNote?'active-note':'') + '" onclick="toggleNote(\'' + key + '\',event)">💬 Заметка</button>' +
+          '</div>' +
+          (s.showNote ? '<div class="item-note-wrap"><textarea class="item-note" placeholder="Опишите замечание или действие..." onclick="event.stopPropagation()" oninput="saveNote(\'' + key + '\',this.value)">' + (s.note||'') + '</textarea></div>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    div.innerHTML =
+      '<div class="section-header" onclick="this.closest(\'.section\').classList.toggle(\'open\')">' +
+        '<div class="section-icon">' + sec.icon + '</div>' +
+        '<div class="section-info">' +
+          '<div class="section-name">' + sec.name + '</div>' +
+          '<div class="section-sub">' + checked + ' из ' + total + (issues ? ' · ⚠️ ' + issues + ' замеч.' : '') + '</div>' +
+        '</div>' +
+        '<div class="section-badge" ' + badgeStyle + '>' + checked + '/' + total + '</div>' +
+        '<div class="section-chevron">▾</div>' +
+      '</div>' +
+      '<div class="section-body">' + itemsHTML + '</div>';
+
+    container.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+function toggleItem(key, e) {
+  if (e.target.closest('.tag-btn') || e.target.closest('textarea')) return;
+  const s = state[key];
+  s.checked = !s.checked;
+  if (s.checked) s.issue = false;
+  render(); saveState();
+}
+
+function toggleIssue(key, e) {
+  e.stopPropagation();
+  const s = state[key];
+  s.issue = !s.issue;
+  if (s.issue) { s.checked = false; s.showNote = true; }
+  render(); saveState();
+}
+
+function toggleNote(key, e) {
+  e.stopPropagation();
+  state[key].showNote = !state[key].showNote;
+  render();
+}
+
+function saveNote(key, val) {
+  state[key].note = val; saveState();
+}
+
+function toggleAll() {
+  allOpen = !allOpen;
+  document.querySelectorAll('.section').forEach(function(s) {
+    allOpen ? s.classList.add('open') : s.classList.remove('open');
+  });
+}
+
+function updateProgress() {
+  var total = 0, done = 0;
+  SECTIONS.forEach(function(s) {
+    s.items.forEach(function(_, i) {
+      total++;
+      if (state[s.id + '_' + i] && state[s.id + '_' + i].checked) done++;
+    });
+  });
+  var pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('scoreText').textContent = done + ' / ' + total + ' (' + pct + '%)';
+}
+
+function resetAll() {
+  if (!confirm('Сбросить весь чек-лист?')) return;
+  state = {}; initState();
+  document.getElementById('storeSelect').value = '';
+  document.getElementById('managerInput').value = '';
+  try { localStorage.removeItem('cl_v2'); } catch(e){}
+  render();
+}
+
+function openReport() {
+  var store = document.getElementById('storeSelect').value || '—';
+  var manager = document.getElementById('managerInput').value || '—';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
+  var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
+
+  var total = 0, done = 0, issues = [];
+  SECTIONS.forEach(function(sec) {
+    sec.items.forEach(function(item, i) {
+      var key = sec.id + '_' + i, s = state[key] || {};
+      total++; if (s.checked) done++;
+      if (s.issue || (!s.checked && s.note)) issues.push({section:sec.name, text:item.text, note:s.note, isIssue:s.issue});
+    });
+  });
+
+  var pct = total ? Math.round(done / total * 100) : 0;
+  var cls = pct >= 80 ? 'score-good' : pct >= 55 ? 'score-mid' : 'score-bad';
+  var emoji = pct >= 80 ? '✅' : pct >= 55 ? '⚠️' : '❌';
+
+  var issuesHTML = '';
+  if (issues.length) {
+    issuesHTML = '<div class="report-section"><div class="report-section-title">Замечания</div>';
+    issues.forEach(function(iss) {
+      issuesHTML += '<div class="report-issue"><div class="report-issue-section">' + iss.section + '</div>' +
+        iss.text + (iss.note ? '<div class="note-text">→ ' + iss.note + '</div>' : '') + '</div>';
+    });
+    issuesHTML += '</div>';
+  } else {
+    issuesHTML = '<div style="text-align:center;color:var(--green);font-size:13px;padding:10px 0;font-weight:700">Замечаний не выявлено 🎉</div>';
+  }
+
+  document.getElementById('reportContent').innerHTML =
+    '<div class="report-score-big">' +
+      '<div class="report-score-num ' + cls + '">' + pct + '%</div>' +
+      '<div class="report-score-label">' + emoji + ' Выполнено ' + done + ' из ' + total + ' пунктов</div>' +
+    '</div>' +
+    '<div class="report-meta">🏪 <b>' + store + '</b><br>👤 ' + manager + '<br>📅 ' + dateStr + ', ' + timeStr + '</div>' +
+    issuesHTML;
+
+  document.getElementById('reportModal').classList.add('open');
+}
+
+function closeReport() {
+  document.getElementById('reportModal').classList.remove('open');
+}
+
+function copyReport() {
+  var store = document.getElementById('storeSelect').value || '—';
+  var manager = document.getElementById('managerInput').value || '—';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
+  var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
+  var t1 = document.getElementById('task1').value;
+  var t2 = document.getElementById('task2').value;
+  var t3 = document.getElementById('task3').value;
+
+  var total = 0, done = 0, issueLines = [];
+  SECTIONS.forEach(function(sec) {
+    sec.items.forEach(function(item, i) {
+      var key = sec.id + '_' + i, s = state[key] || {};
+      total++; if (s.checked) done++;
+      if (s.issue || (!s.checked && s.note)) {
+        issueLines.push('  ⚠️ [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
+      }
+    });
+  });
+  var pct = total ? Math.round(done / total * 100) : 0;
+
+  var lines = [
+    '📋 ПРОВЕРКА МАГАЗИНА',
+    '🏪 ' + store + '  |  👤 ' + manager,
+    '📅 ' + dateStr + ', ' + timeStr,
+    '',
+    'Выполнено: ' + done + '/' + total + ' (' + pct + '%)',
+    '',
+  ];
+  if (issueLines.length) {
+    lines.push('ЗАМЕЧАНИЯ:');
+    issueLines.forEach(function(l) { lines.push(l); });
+    lines.push('');
+  } else {
+    lines.push('Замечаний не выявлено ✅');
+    lines.push('');
+  }
+  var tasks = [t1,t2,t3].filter(function(t){ return t && t.trim(); });
+  if (tasks.length) {
+    lines.push('ЗАДАЧИ ДО СЛЕДУЮЩЕГО ВИЗИТА:');
+    tasks.forEach(function(t, i) { lines.push('  ' + (i+1) + '. ' + t); });
+  }
+
+  navigator.clipboard.writeText(lines.join('\n')).then(function() {
+    var btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Скопировано!';
+    setTimeout(function(){ btn.textContent = '📋 Скопировать отчёт'; }, 2000);
+  }).catch(function(){ alert('Не удалось скопировать. Попробуйте вручную.'); });
+}
+
+function setDate() {
+  var now = new Date();
+  document.getElementById('dateDisplay').textContent =
+    now.toLocaleDateString('ru-RU', {weekday:'long', day:'numeric', month:'long'});
+}
+
+setDate();
+initState();
+loadState();
+render();
+document.getElementById('storeSelect').addEventListener('change', saveState);
+document.getElementById('managerInput').addEventListener('input', saveState);
+</script>
+</body>
+</html>
