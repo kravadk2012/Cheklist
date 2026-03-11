@@ -173,6 +173,8 @@
       <div class="task-input-wrap"><span class="task-num">1.</span><input class="task-input" id="task1" placeholder="Задача..."></div>
       <div class="task-input-wrap"><span class="task-num">2.</span><input class="task-input" id="task2" placeholder="Задача..."></div>
       <div class="task-input-wrap"><span class="task-num">3.</span><input class="task-input" id="task3" placeholder="Задача..."></div>
+      <div class="task-input-wrap"><span class="task-num">4.</span><input class="task-input" id="task4" placeholder="Задача..."></div>
+      <div class="task-input-wrap"><span class="task-num">5.</span><input class="task-input" id="task5" placeholder="Задача..."></div>
     </div>
     <button class="copy-btn" onclick="copyReport()">📋 Скопировать отчёт</button>
     <button class="close-btn" onclick="closeReport()">Закрыть</button>
@@ -451,6 +453,8 @@ function copyReport() {
   var t1 = document.getElementById('task1').value;
   var t2 = document.getElementById('task2').value;
   var t3 = document.getElementById('task3').value;
+  var t4 = document.getElementById('task4').value;
+  var t5 = document.getElementById('task5').value;
 
   var total = 0, done = 0, issueLines = [];
   SECTIONS.forEach(function(sec) {
@@ -480,7 +484,7 @@ function copyReport() {
     lines.push('Замечаний не выявлено ✅');
     lines.push('');
   }
-  var tasks = [t1,t2,t3].filter(function(t){ return t && t.trim(); });
+  var tasks = [t1,t2,t3,t4,t5].filter(function(t){ return t && t.trim(); });
   if (tasks.length) {
     lines.push('ЗАДАЧИ ДО СЛЕДУЮЩЕГО ВИЗИТА:');
     tasks.forEach(function(t, i) { lines.push('  ' + (i+1) + '. ' + t); });
