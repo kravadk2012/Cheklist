@@ -253,6 +253,7 @@ const SECTIONS = [
 
 let state = {};
 let allOpen = false;
+let openSections = {'s0': true};
 
 function initState() {
   SECTIONS.forEach(s => s.items.forEach((_, i) => {
@@ -290,7 +291,7 @@ function render() {
     const issues = sec.items.filter((_,i) => state[sec.id+'_'+i] && state[sec.id+'_'+i].issue).length;
 
     const div = document.createElement('div');
-    const isOpen = si === 0 || allOpen;
+    const isOpen = openSections[sec.id] || false;
     div.className = 'section ' + sec.id + (isOpen ? ' open' : '');
 
     let badgeStyle = '';
@@ -317,7 +318,7 @@ function render() {
     }).join('');
 
     div.innerHTML =
-      '<div class="section-header" onclick="this.closest(\'.section\').classList.toggle(\'open\')">' +
+      '<div class="section-header" onclick="toggleSection(\'' + sec.id + '\')">' +
         '<div class="section-icon">' + sec.icon + '</div>' +
         '<div class="section-info">' +
           '<div class="section-name">' + sec.name + '</div>' +
@@ -335,6 +336,7 @@ function render() {
 }
 
 function toggleItem(key, e) {
+  e.stopPropagation();
   if (e.target.closest('.tag-btn') || e.target.closest('textarea')) return;
   const s = state[key];
   s.checked = !s.checked;
@@ -360,11 +362,15 @@ function saveNote(key, val) {
   state[key].note = val; saveState();
 }
 
+function toggleSection(secId) {
+  openSections[secId] = !openSections[secId];
+  render();
+}
+
 function toggleAll() {
   allOpen = !allOpen;
-  document.querySelectorAll('.section').forEach(function(s) {
-    allOpen ? s.classList.add('open') : s.classList.remove('open');
-  });
+  SECTIONS.forEach(function(s) { openSections[s.id] = allOpen; });
+  render();
 }
 
 function updateProgress() {
