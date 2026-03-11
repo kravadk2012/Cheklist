@@ -461,8 +461,9 @@ function copyReport() {
     sec.items.forEach(function(item, i) {
       var key = sec.id + '_' + i, s = state[key] || {};
       total++; if (s.checked) done++;
-      if (s.issue || (!s.checked && s.note)) {
-        issueLines.push('  ⚠️ [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
+      if (s.issue || s.note) {
+        var prefix = s.issue ? '  ⚠️' : '  💬';
+        issueLines.push(prefix + ' [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
       }
     });
   });
