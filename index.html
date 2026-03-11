@@ -118,6 +118,9 @@
   .task-input::placeholder { color:var(--text3); }
 
   .copy-btn { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--text); font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:14px; }
+  /* ++ НОВАЯ КНОПКА TELEGRAM ++ */
+  .tg-btn { width:100%; background:linear-gradient(135deg,#2AABEE,#229ED9); border:none; border-radius:12px; color:white; font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:8px; }
+  .tg-btn:disabled { opacity:.6; }
   .close-btn { width:100%; background:transparent; border:1px solid var(--border); border-radius:12px; color:var(--text2); font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:8px; }
 </style>
 </head>
@@ -177,6 +180,8 @@
       <div class="task-input-wrap"><span class="task-num">5.</span><input class="task-input" id="task5" placeholder="Задача..."></div>
     </div>
     <button class="copy-btn" onclick="copyReport()">📋 Скопировать отчёт</button>
+    <!-- ++ НОВАЯ КНОПКА ++ -->
+    <button class="tg-btn" id="tgBtn" onclick="sendToTelegram()">✈️ Отправить в Telegram</button>
     <button class="close-btn" onclick="closeReport()">Закрыть</button>
   </div>
 </div>
@@ -497,6 +502,83 @@ function copyReport() {
     setTimeout(function(){ btn.textContent = '📋 Скопировать отчёт'; }, 2000);
   }).catch(function(){ alert('Не удалось скопировать. Попробуйте вручную.'); });
 }
+
+// ++ НОВЫЕ ФУНКЦИИ TELEGRAM ++
+function buildReportText() {
+  var store = document.getElementById('storeSelect').value || '—';
+  var manager = document.getElementById('managerInput').value || '—';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
+  var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
+  var t1 = document.getElementById('task1').value;
+  var t2 = document.getElementById('task2').value;
+  var t3 = document.getElementById('task3').value;
+  var t4 = document.getElementById('task4').value;
+  var t5 = document.getElementById('task5').value;
+
+  var total = 0, done = 0, issueLines = [];
+  SECTIONS.forEach(function(sec) {
+    sec.items.forEach(function(item, i) {
+      var key = sec.id + '_' + i, s = state[key] || {};
+      total++; if (s.checked) done++;
+      if (s.issue || s.note) {
+        var prefix = s.issue ? '⚠️' : '💬';
+        issueLines.push(prefix + ' [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
+      }
+    });
+  });
+  var pct = total ? Math.round(done / total * 100) : 0;
+
+  var lines = [
+    '📋 ПРОВЕРКА МАГАЗИНА',
+    '🏪 ' + store + '  |  👤 ' + manager,
+    '📅 ' + dateStr + ', ' + timeStr,
+    '',
+    'Выполнено: ' + done + '/' + total + ' (' + pct + '%)',
+    '',
+  ];
+  if (issueLines.length) {
+    lines.push('ЗАМЕЧАНИЯ:');
+    issueLines.forEach(function(l) { lines.push(l); });
+    lines.push('');
+  } else {
+    lines.push('Замечаний не выявлено ✅');
+    lines.push('');
+  }
+  var tasks = [t1,t2,t3,t4,t5].filter(function(t){ return t && t.trim(); });
+  if (tasks.length) {
+    lines.push('ЗАДАЧИ ДО СЛЕДУЮЩЕГО ВИЗИТА:');
+    tasks.forEach(function(t, i) { lines.push('  ' + (i+1) + '. ' + t); });
+  }
+  return lines.join('\n');
+}
+
+function sendToTelegram() {
+  var token = '8373715074:AAFgfYm4TThH52ggGQHywcCU6DJk2_tpU2A';
+  var chatId = '-5148983209';
+  var text = buildReportText();
+  var btn = document.getElementById('tgBtn');
+  btn.textContent = '⏳ Отправляю...';
+  btn.disabled = true;
+  fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({chat_id: chatId, text: text})
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.ok) {
+      btn.textContent = '✅ Отправлено!';
+    } else {
+      btn.textContent = '❌ Ошибка';
+      btn.disabled = false;
+    }
+    setTimeout(function() { btn.textContent = '✈️ Отправить в Telegram'; btn.disabled = false; }, 3000);
+  }).catch(function() {
+    btn.textContent = '❌ Нет соединения';
+    btn.disabled = false;
+    setTimeout(function() { btn.textContent = '✈️ Отправить в Telegram'; }, 3000);
+  });
+}
+// ++ КОНЕЦ НОВЫХ ФУНКЦИЙ ++
 
 function setDate() {
   var now = new Date();
