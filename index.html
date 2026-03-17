@@ -596,7 +596,8 @@ function sendToTelegram() {
   var pct = total ? Math.round(done / total * 100) : 0;
   fetch(scriptUrl, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
     body: JSON.stringify({
       date: dateStr + ' ' + timeStr,
       store: store,
