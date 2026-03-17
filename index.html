@@ -577,6 +577,34 @@ function sendToTelegram() {
     btn.disabled = false;
     setTimeout(function() { btn.textContent = '✈️ Отправить в Telegram'; }, 3000);
   });
+  var scriptUrl = 'https://script.google.com/macros/s/AKfycbzk8b3d9YXZjwzy8ftPC683LYt4gsaTNJg8SmOQRMhT3hlcDX25og0_noQOFvqVtAtl3A/exec';
+  var store = document.getElementById('storeSelect').value || '—';
+  var manager = document.getElementById('managerInput').value || '—';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
+  var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
+  var total = 0, done = 0, issueLines = [];
+  SECTIONS.forEach(function(sec) {
+    sec.items.forEach(function(item, i) {
+      var key = sec.id + '_' + i, s = state[key] || {};
+      total++; if (s.checked) done++;
+      if (s.issue || s.note) {
+        issueLines.push((s.issue ? '⚠️' : '💬') + ' ' + item.text + (s.note ? ' — ' + s.note : ''));
+      }
+    });
+  });
+  var pct = total ? Math.round(done / total * 100) : 0;
+  fetch(scriptUrl, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      date: dateStr + ' ' + timeStr,
+      store: store,
+      manager: manager,
+      pct: pct,
+      issues: issueLines.join(' | ') || 'Замечаний нет'
+    })
+  }).catch(function(){});
 }
 // ++ КОНЕЦ НОВЫХ ФУНКЦИЙ ++
 
