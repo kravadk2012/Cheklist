@@ -22,26 +22,22 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { font-family:'Manrope',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:130px; }
-
   .header { background:linear-gradient(135deg,#1a1d27,#22263a); padding:18px 14px 14px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
   .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
   .header-title { font-size:17px; font-weight:800; letter-spacing:-0.3px; }
   .header-sub { font-size:11px; color:var(--text2); margin-top:2px; }
   .reset-btn { background:var(--surface2); border:1px solid var(--border); color:var(--text2); font-family:'Manrope',sans-serif; font-size:12px; font-weight:600; padding:6px 12px; border-radius:8px; cursor:pointer; }
-
   .meta-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
   .meta-field { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:8px 12px; }
   .meta-label { font-size:10px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
   .meta-select, .meta-input { background:transparent; border:none; color:var(--text); font-family:'Manrope',sans-serif; font-size:14px; font-weight:600; width:100%; outline:none; }
   .meta-select option { background:#22263a; }
-
   .progress-wrap { background:var(--surface2); border-radius:10px; padding:10px 14px; }
   .progress-nums { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
   .progress-label { font-size:12px; color:var(--text2); font-weight:600; }
   .progress-score { font-size:17px; font-weight:800; }
   .progress-bar-bg { height:6px; background:var(--border); border-radius:10px; overflow:hidden; }
   .progress-bar-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .4s cubic-bezier(.4,0,.2,1); width:0%; }
-
   .sections { padding:10px 12px 0; }
   .section { background:var(--surface); border:1px solid var(--border); border-radius:14px; margin-bottom:10px; overflow:hidden; }
   .section-header { display:flex; align-items:center; gap:10px; padding:13px 14px; cursor:pointer; user-select:none; }
@@ -54,14 +50,12 @@
   .section.open .section-chevron { transform:rotate(180deg); }
   .section-body { display:none; border-top:1px solid var(--border); }
   .section.open .section-body { display:block; }
-
   .s0 .section-icon { background:rgba(79,127,255,.15); }
   .s1 .section-icon { background:rgba(34,197,94,.15); }
   .s2 .section-icon { background:rgba(245,158,11,.15); }
   .s3 .section-icon { background:rgba(239,68,68,.15); }
   .s4 .section-icon { background:rgba(123,92,240,.15); }
   .s5 .section-icon { background:rgba(20,184,166,.15); }
-
   .item { display:flex; align-items:flex-start; gap:12px; padding:11px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .15s; }
   .item:last-child { border-bottom:none; }
   .item:active { background:var(--surface2); }
@@ -82,33 +76,27 @@
   .item-note { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Manrope',sans-serif; font-size:12px; padding:7px 10px; resize:none; outline:none; min-height:52px; }
   .item-note:focus { border-color:var(--accent); }
   .item-note::placeholder { color:var(--text3); }
-
   .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border); padding:10px 14px; display:flex; gap:8px; }
   .btn-primary { flex:1; background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; border-radius:12px; color:white; font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; transition:opacity .2s; }
   .btn-primary:active { opacity:.85; }
   .btn-secondary { background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--text2); font-family:'Manrope',sans-serif; font-size:13px; font-weight:700; padding:13px 14px; cursor:pointer; }
-
   .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200; align-items:flex-end; }
   .modal-overlay.open { display:flex; }
   .modal { background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-height:88vh; overflow-y:auto; padding:18px 16px 40px; border:1px solid var(--border); border-bottom:none; }
   .modal-handle { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 18px; }
   .modal-title { font-size:18px; font-weight:800; margin-bottom:16px; }
-
   .report-score-big { text-align:center; padding:18px; background:var(--surface2); border-radius:12px; margin-bottom:14px; }
   .report-score-num { font-size:52px; font-weight:800; line-height:1; margin-bottom:4px; }
   .score-good { color:var(--green); }
   .score-mid { color:var(--yellow); }
   .score-bad { color:var(--red); }
   .report-score-label { font-size:13px; color:var(--text2); }
-
   .report-meta { background:var(--surface2); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:13px; color:var(--text2); line-height:1.9; }
-
   .report-section { margin-bottom:14px; }
   .report-section-title { font-size:11px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; }
   .report-issue { background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.22); border-radius:8px; padding:9px 12px; font-size:13px; margin-bottom:6px; line-height:1.4; }
   .report-issue-section { font-size:10px; color:var(--red); font-weight:700; margin-bottom:2px; text-transform:uppercase; letter-spacing:.4px; }
   .note-text { font-size:12px; color:var(--text2); margin-top:4px; }
-
   .tasks-section { margin-top:14px; }
   .tasks-title { font-size:13px; font-weight:700; color:var(--text2); margin-bottom:10px; }
   .task-input-wrap { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
@@ -116,16 +104,13 @@
   .task-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Manrope',sans-serif; font-size:13px; padding:8px 12px; outline:none; }
   .task-input:focus { border-color:var(--accent); }
   .task-input::placeholder { color:var(--text3); }
-
   .copy-btn { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--text); font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:14px; }
-  /* ++ НОВАЯ КНОПКА TELEGRAM ++ */
   .tg-btn { width:100%; background:linear-gradient(135deg,#2AABEE,#229ED9); border:none; border-radius:12px; color:white; font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:8px; }
   .tg-btn:disabled { opacity:.6; }
   .close-btn { width:100%; background:transparent; border:1px solid var(--border); border-radius:12px; color:var(--text2); font-family:'Manrope',sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; margin-top:8px; }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-top">
     <div>
@@ -158,14 +143,11 @@
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
   </div>
 </div>
-
 <div class="sections" id="sectionsContainer"></div>
-
 <div class="bottom-bar">
   <button class="btn-secondary" onclick="toggleAll()">☰ Все</button>
   <button class="btn-primary" onclick="openReport()">📋 Итоговый отчёт</button>
 </div>
-
 <div class="modal-overlay" id="reportModal" onclick="if(event.target===this)closeReport()">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -180,13 +162,19 @@
       <div class="task-input-wrap"><span class="task-num">5.</span><input class="task-input" id="task5" placeholder="Задача..."></div>
     </div>
     <button class="copy-btn" onclick="copyReport()">📋 Скопировать отчёт</button>
-    <!-- ++ НОВАЯ КНОПКА ++ -->
-    <button class="tg-btn" id="tgBtn" onclick="sendToTelegram()">✈️ Отправить в Telegram</button>
+    <button class="tg-btn" id="tgBtn" onclick="submitReport()">✈️ Отправить в Telegram</button>
     <button class="close-btn" onclick="closeReport()">Закрыть</button>
   </div>
 </div>
-
 <script>
+// === Настройка после деплоя Apps Script (см. Code.gs) ===
+// Вставьте сюда URL вашего развёрнутого Web App и тот же секрет,
+// что указан в Script Properties (APP_SECRET) этого проекта.
+// Ни токен бота, ни chat_id здесь больше не хранятся — это единственное,
+// что видно в исходнике страницы, и это не даёт полного доступа к боту.
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSsSSHbuw09_N9P3K0d0bxQClZ17JcjOX8pCHYyKVw7tfaxl4e06q2lYs4SIeycIwWYg/exec';
+const APP_SECRET = 'trt-8f2k9d';
+
 const SECTIONS = [
   {
     id:'s0', icon:'🚪', name:'Вход и торговый зал',
@@ -257,10 +245,18 @@ const SECTIONS = [
     ]
   },
 ];
-
 let state = {};
 let allOpen = false;
 let openSections = {'s0': true};
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function initState() {
   SECTIONS.forEach(s => s.items.forEach((_, i) => {
@@ -268,7 +264,6 @@ function initState() {
     if (!state[key]) state[key] = { checked:false, issue:false, note:'', showNote:false };
   }));
 }
-
 function saveState() {
   const meta = {
     store: document.getElementById('storeSelect').value,
@@ -276,7 +271,6 @@ function saveState() {
   };
   try { localStorage.setItem('cl_v2', JSON.stringify({state, meta})); } catch(e){}
 }
-
 function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem('cl_v2') || 'null');
@@ -287,24 +281,19 @@ function loadState() {
     }
   } catch(e){}
 }
-
 function render() {
   const container = document.getElementById('sectionsContainer');
   container.innerHTML = '';
-
   SECTIONS.forEach((sec, si) => {
     const total = sec.items.length;
     const checked = sec.items.filter((_,i) => state[sec.id+'_'+i] && state[sec.id+'_'+i].checked).length;
     const issues = sec.items.filter((_,i) => state[sec.id+'_'+i] && state[sec.id+'_'+i].issue).length;
-
     const div = document.createElement('div');
     const isOpen = openSections[sec.id] || false;
     div.className = 'section ' + sec.id + (isOpen ? ' open' : '');
-
     let badgeStyle = '';
     if (checked === total) badgeStyle = 'style="background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22c55e"';
     else if (issues > 0) badgeStyle = 'style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#ef4444"';
-
     const itemsHTML = sec.items.map((item, i) => {
       const key = sec.id + '_' + i;
       const s = state[key] || {};
@@ -319,11 +308,10 @@ function render() {
             '<button class="tag-btn ' + (s.issue?'active-issue':'') + '" onclick="toggleIssue(\'' + key + '\',event)">⚠️ Замечание</button>' +
             '<button class="tag-btn ' + (s.showNote?'active-note':'') + '" onclick="toggleNote(\'' + key + '\',event)">💬 Заметка</button>' +
           '</div>' +
-          (s.showNote ? '<div class="item-note-wrap"><textarea class="item-note" placeholder="Опишите замечание или действие..." onclick="event.stopPropagation()" oninput="saveNote(\'' + key + '\',this.value)">' + (s.note||'') + '</textarea></div>' : '') +
+          (s.showNote ? '<div class="item-note-wrap"><textarea class="item-note" placeholder="Опишите замечание или действие..." onclick="event.stopPropagation()" oninput="saveNote(\'' + key + '\',this.value)">' + escapeHtml(s.note||'') + '</textarea></div>' : '') +
         '</div>' +
       '</div>';
     }).join('');
-
     div.innerHTML =
       '<div class="section-header" onclick="toggleSection(\'' + sec.id + '\')">' +
         '<div class="section-icon">' + sec.icon + '</div>' +
@@ -335,13 +323,10 @@ function render() {
         '<div class="section-chevron">▾</div>' +
       '</div>' +
       '<div class="section-body">' + itemsHTML + '</div>';
-
     container.appendChild(div);
   });
-
   updateProgress();
 }
-
 function toggleItem(key, e) {
   e.stopPropagation();
   if (e.target.closest('.tag-btn') || e.target.closest('textarea')) return;
@@ -350,7 +335,6 @@ function toggleItem(key, e) {
   if (s.checked) s.issue = false;
   render(); saveState();
 }
-
 function toggleIssue(key, e) {
   e.stopPropagation();
   const s = state[key];
@@ -358,28 +342,23 @@ function toggleIssue(key, e) {
   if (s.issue) { s.checked = false; s.showNote = true; }
   render(); saveState();
 }
-
 function toggleNote(key, e) {
   e.stopPropagation();
   state[key].showNote = !state[key].showNote;
   render();
 }
-
 function saveNote(key, val) {
   state[key].note = val; saveState();
 }
-
 function toggleSection(secId) {
   openSections[secId] = !openSections[secId];
   render();
 }
-
 function toggleAll() {
   allOpen = !allOpen;
   SECTIONS.forEach(function(s) { openSections[s.id] = allOpen; });
   render();
 }
-
 function updateProgress() {
   var total = 0, done = 0;
   SECTIONS.forEach(function(s) {
@@ -392,7 +371,6 @@ function updateProgress() {
   document.getElementById('progressBar').style.width = pct + '%';
   document.getElementById('scoreText').textContent = done + ' / ' + total + ' (' + pct + '%)';
 }
-
 function resetAll() {
   if (!confirm('Сбросить весь чек-лист?')) return;
   state = {}; initState();
@@ -401,14 +379,12 @@ function resetAll() {
   try { localStorage.removeItem('cl_v2'); } catch(e){}
   render();
 }
-
 function openReport() {
   var store = document.getElementById('storeSelect').value || '—';
   var manager = document.getElementById('managerInput').value || '—';
   var now = new Date();
   var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
   var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
-
   var total = 0, done = 0, issues = [];
   SECTIONS.forEach(function(sec) {
     sec.items.forEach(function(item, i) {
@@ -417,93 +393,32 @@ function openReport() {
       if (s.issue || (!s.checked && s.note)) issues.push({section:sec.name, text:item.text, note:s.note, isIssue:s.issue});
     });
   });
-
   var pct = total ? Math.round(done / total * 100) : 0;
   var cls = pct >= 80 ? 'score-good' : pct >= 55 ? 'score-mid' : 'score-bad';
   var emoji = pct >= 80 ? '✅' : pct >= 55 ? '⚠️' : '❌';
-
   var issuesHTML = '';
   if (issues.length) {
     issuesHTML = '<div class="report-section"><div class="report-section-title">Замечания</div>';
     issues.forEach(function(iss) {
       issuesHTML += '<div class="report-issue"><div class="report-issue-section">' + iss.section + '</div>' +
-        iss.text + (iss.note ? '<div class="note-text">→ ' + iss.note + '</div>' : '') + '</div>';
+        iss.text + (iss.note ? '<div class="note-text">→ ' + escapeHtml(iss.note) + '</div>' : '') + '</div>';
     });
     issuesHTML += '</div>';
   } else {
     issuesHTML = '<div style="text-align:center;color:var(--green);font-size:13px;padding:10px 0;font-weight:700">Замечаний не выявлено 🎉</div>';
   }
-
   document.getElementById('reportContent').innerHTML =
     '<div class="report-score-big">' +
       '<div class="report-score-num ' + cls + '">' + pct + '%</div>' +
       '<div class="report-score-label">' + emoji + ' Выполнено ' + done + ' из ' + total + ' пунктов</div>' +
     '</div>' +
-    '<div class="report-meta">🏪 <b>' + store + '</b><br>👤 ' + manager + '<br>📅 ' + dateStr + ', ' + timeStr + '</div>' +
+    '<div class="report-meta">🏪 <b>' + escapeHtml(store) + '</b><br>👤 ' + escapeHtml(manager) + '<br>📅 ' + dateStr + ', ' + timeStr + '</div>' +
     issuesHTML;
-
   document.getElementById('reportModal').classList.add('open');
 }
-
 function closeReport() {
   document.getElementById('reportModal').classList.remove('open');
 }
-
-function copyReport() {
-  var store = document.getElementById('storeSelect').value || '—';
-  var manager = document.getElementById('managerInput').value || '—';
-  var now = new Date();
-  var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
-  var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
-  var t1 = document.getElementById('task1').value;
-  var t2 = document.getElementById('task2').value;
-  var t3 = document.getElementById('task3').value;
-  var t4 = document.getElementById('task4').value;
-  var t5 = document.getElementById('task5').value;
-
-  var total = 0, done = 0, issueLines = [];
-  SECTIONS.forEach(function(sec) {
-    sec.items.forEach(function(item, i) {
-      var key = sec.id + '_' + i, s = state[key] || {};
-      total++; if (s.checked) done++;
-      if (s.issue || s.note) {
-        var prefix = s.issue ? '  ⚠️' : '  💬';
-        issueLines.push(prefix + ' [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
-      }
-    });
-  });
-  var pct = total ? Math.round(done / total * 100) : 0;
-
-  var lines = [
-    '📋 ПРОВЕРКА МАГАЗИНА',
-    '🏪 ' + store + '  |  👤 ' + manager,
-    '📅 ' + dateStr + ', ' + timeStr,
-    '',
-    'Выполнено: ' + done + '/' + total + ' (' + pct + '%)',
-    '',
-  ];
-  if (issueLines.length) {
-    lines.push('ЗАМЕЧАНИЯ:');
-    issueLines.forEach(function(l) { lines.push(l); });
-    lines.push('');
-  } else {
-    lines.push('Замечаний не выявлено ✅');
-    lines.push('');
-  }
-  var tasks = [t1,t2,t3,t4,t5].filter(function(t){ return t && t.trim(); });
-  if (tasks.length) {
-    lines.push('ЗАДАЧИ ДО СЛЕДУЮЩЕГО ВИЗИТА:');
-    tasks.forEach(function(t, i) { lines.push('  ' + (i+1) + '. ' + t); });
-  }
-
-  navigator.clipboard.writeText(lines.join('\n')).then(function() {
-    var btn = document.querySelector('.copy-btn');
-    btn.textContent = '✅ Скопировано!';
-    setTimeout(function(){ btn.textContent = '📋 Скопировать отчёт'; }, 2000);
-  }).catch(function(){ alert('Не удалось скопировать. Попробуйте вручную.'); });
-}
-
-// ++ НОВЫЕ ФУНКЦИИ TELEGRAM ++
 function buildReportText() {
   var store = document.getElementById('storeSelect').value || '—';
   var manager = document.getElementById('managerInput').value || '—';
@@ -515,7 +430,6 @@ function buildReportText() {
   var t3 = document.getElementById('task3').value;
   var t4 = document.getElementById('task4').value;
   var t5 = document.getElementById('task5').value;
-
   var total = 0, done = 0, issueLines = [];
   SECTIONS.forEach(function(sec) {
     sec.items.forEach(function(item, i) {
@@ -523,12 +437,11 @@ function buildReportText() {
       total++; if (s.checked) done++;
       if (s.issue || s.note) {
         var prefix = s.issue ? '⚠️' : '💬';
-        issueLines.push(prefix + ' [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
+        issueLines.push('  ' + prefix + ' [' + sec.name + '] ' + item.text + (s.note ? ' — ' + s.note : ''));
       }
     });
   });
   var pct = total ? Math.round(done / total * 100) : 0;
-
   var lines = [
     '📋 ПРОВЕРКА МАГАЗИНА',
     '🏪 ' + store + '  |  👤 ' + manager,
@@ -552,69 +465,73 @@ function buildReportText() {
   }
   return lines.join('\n');
 }
-
-function sendToTelegram() {
-  var token = '8373715074:AAGqzTMd2fj_Z9SjCMESpt4SXIwnDjUg-vM';
-  var chatId = '-5148983209';
+function copyReport() {
   var text = buildReportText();
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Скопировано!';
+    setTimeout(function(){ btn.textContent = '📋 Скопировать отчёт'; }, 2000);
+  }).catch(function(){ alert('Не удалось скопировать. Попробуйте вручную.'); });
+}
+
+// Единственный сетевой вызов отчёта: идёт на ваш Apps Script,
+// который сам знает токен бота и сам пишет строку в таблицу.
+async function submitReport() {
   var btn = document.getElementById('tgBtn');
-  btn.textContent = '⏳ Отправляю...';
-  btn.disabled = true;
-  fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({chat_id: chatId, text: text})
-  }).then(function(r) { return r.json(); }).then(function(d) {
-    if (d.ok) {
-      btn.textContent = '✅ Отправлено!';
-    } else {
-      btn.textContent = '❌ Ошибка';
-      btn.disabled = false;
-    }
-    setTimeout(function() { btn.textContent = '✈️ Отправить в Telegram'; btn.disabled = false; }, 3000);
-  }).catch(function() {
-    btn.textContent = '❌ Нет соединения';
-    btn.disabled = false;
-    setTimeout(function() { btn.textContent = '✈️ Отправить в Telegram'; }, 3000);
-  });
-  var scriptUrl = 'https://script.google.com/macros/s/AKfycbyk04zrP2jyHlO-L850t8if4z9OtWCyzkxdNb4T916M-TJdGgTy8p86PX9hJ27nem58sw/exec';
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('ВСТАВЬТЕ') !== -1) {
+    alert('Сначала подключите APPS_SCRIPT_URL в коде страницы (см. инструкцию).');
+    return;
+  }
+
+  var text = buildReportText();
   var store = document.getElementById('storeSelect').value || '—';
   var manager = document.getElementById('managerInput').value || '—';
-  var now = new Date();
-  var dateStr = now.toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
-  var timeStr = now.toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
-  var total = 0, done = 0, issueLines = [];
-  SECTIONS.forEach(function(sec) {
-    sec.items.forEach(function(item, i) {
-      var key = sec.id + '_' + i, s = state[key] || {};
-      total++; if (s.checked) done++;
-      if (s.issue || s.note) {
-        issueLines.push((s.issue ? '⚠️' : '💬') + ' ' + item.text + (s.note ? ' — ' + s.note : ''));
-      }
+  var total = 0, done = 0;
+  SECTIONS.forEach(function(sec){ sec.items.forEach(function(_, i){ total++; if(state[sec.id+'_'+i] && state[sec.id+'_'+i].checked) done++; }); });
+  var pct = total ? Math.round(done/total*100) : 0;
+
+  var payload = JSON.stringify({ secret: APP_SECRET, text: text, store: store, manager: manager, pct: pct, done: done, total: total });
+
+  btn.textContent = '⏳ Отправляю...';
+  btn.disabled = true;
+
+  try {
+    var res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: payload
     });
-  });
-  var pct = total ? Math.round(done / total * 100) : 0;
-  fetch(scriptUrl, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type': 'text/plain'},
-    body: JSON.stringify({
-      date: dateStr + ' ' + timeStr,
-      store: store,
-      manager: manager,
-      pct: pct,
-      issues: issueLines.join(' | ') || 'Замечаний нет'
-    })
-  }).catch(function(){});
+    var data = await res.json();
+    if (data.ok) {
+      btn.textContent = '✅ Отправлено!';
+    } else {
+      btn.textContent = '❌ Ошибка: ' + (data.error || 'неизвестно');
+      btn.disabled = false;
+    }
+  } catch (err) {
+    // Если браузер блокирует чтение ответа (CORS) — отправляем вслепую,
+    // как и раньше делал запрос в таблицу.
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        body: payload
+      });
+      btn.textContent = '✅ Отправлено (без подтверждения)';
+    } catch (err2) {
+      btn.textContent = '❌ Нет соединения';
+      btn.disabled = false;
+    }
+  }
+  setTimeout(function() { btn.textContent = '✈️ Отправить в Telegram'; btn.disabled = false; }, 3000);
 }
-// ++ КОНЕЦ НОВЫХ ФУНКЦИЙ ++
 
 function setDate() {
   var now = new Date();
   document.getElementById('dateDisplay').textContent =
     now.toLocaleDateString('ru-RU', {weekday:'long', day:'numeric', month:'long'});
 }
-
 setDate();
 initState();
 loadState();
